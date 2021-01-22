@@ -46,8 +46,7 @@ obj/app.o: App/Src/app.c \
  /Users/UnknownSP/UnknownSP/stm32f_system_SPINFEVER/Drivers/middleLayers/GPIO/Inc/MW_GPIO.h \
  /Users/UnknownSP/UnknownSP/stm32f_system_SPINFEVER/Drivers/middleLayers/IWDG/Inc/MW_IWDG.h \
  /Users/UnknownSP/UnknownSP/stm32f_system_SPINFEVER/Drivers/middleLayers/flash/Inc/MW_flash.h \
- /Users/UnknownSP/UnknownSP/stm32f_system_SPINFEVER/App/Inc/constManager.h \
- /Users/UnknownSP/UnknownSP/stm32f_system_SPINFEVER/App/Inc/trapezoid_ctrl.h
+ /Users/UnknownSP/UnknownSP/stm32f_system_SPINFEVER/App/Inc/constManager.h
 
 /Users/UnknownSP/UnknownSP/stm32f_system_SPINFEVER/App/Inc/app.h:
 
@@ -144,5 +143,3 @@ obj/app.o: App/Src/app.c \
 /Users/UnknownSP/UnknownSP/stm32f_system_SPINFEVER/Drivers/middleLayers/flash/Inc/MW_flash.h:
 
 /Users/UnknownSP/UnknownSP/stm32f_system_SPINFEVER/App/Inc/constManager.h:
-
-/Users/UnknownSP/UnknownSP/stm32f_system_SPINFEVER/App/Inc/trapezoid_ctrl.h:

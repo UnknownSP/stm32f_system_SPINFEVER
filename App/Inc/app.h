@@ -2,12 +2,12 @@
 #define __APP_H
 
 /*NO Device mode*/
-#define _NO_DEVICE 1
+#define _NO_DEVICE 0
 
 int appTask(void);
 int appInit(void);
 
-#define DD_NUM_OF_MD 4
+#define DD_NUM_OF_MD 6
 #define DD_NUM_OF_AB 0
 
 #define DD_NUM_OF_LD 0
@@ -18,6 +18,13 @@ int appInit(void);
 
 #define USE_PC_CONTROL 0
 #define DD_USE_RC 0
+
+#define PIC_TYPE1 0
+#define PIC_TYPE2 1
+#define PIC_TYPE3 2
+#define PIC_TYPE4 3
+#define PIC_TYPE6 4
+#define PIC_TYPE8 5
 
 #include "DD_RC.h"
 #include "DD_LD.h"

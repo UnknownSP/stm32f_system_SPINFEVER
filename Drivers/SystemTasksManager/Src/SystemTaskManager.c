@@ -95,7 +95,7 @@ int main(void){
     }
 
     //個々のアプリケーションの実行をします。
-    //SY_doAppTasks();
+    SY_doAppTasks();
     //もしメッセージを出すタイミングであれば
     if( g_SY_system_counter % _MESSAGE_INTERVAL_MS < _INTERVAL_MS ){
 #if USE_PC_CONTROL
@@ -125,9 +125,8 @@ int main(void){
       //MW_printf("%d\n",g_SY_system_counter);
       //MW_printf("%d\n",count);
       //MW_printf("%d",100-count);
-      
       //DD_RCPrint((uint8_t*)g_rc_data);//RCのハンドラを表示します
-      //DD_print();//各デバイスハンドラを表示します
+      DD_print();//各デバイスハンドラを表示します
       flush(); /* out message. */
     }
     //タイミング待ちを行います
@@ -135,49 +134,16 @@ int main(void){
     }
 #if !_NO_DEVICE
     //デバイスがあれば、各デバイスタスクを実行します。これはハンドラに格納されているデータをMDに転送する内容などが含まれます。
-#if DD_NUM_OF_LD
-    if(LED_OFF_SW()){
-      for(i=0;i<DD_NUM_OF_LD;i++){
-	for(j=0;j<8;j++){
-	  g_ld_h[i].mode[j] = D_LMOD_NONE;
-	}
-      }
-    }
-#endif
-      ret = SY_doDevDriverTasks();
+    ret = SY_doDevDriverTasks();
 #endif
     //エラー処理です
     if( ret ){
       message("err", "Device Driver Tasks Faild%d", ret);
-#if DD_NUM_OF_LD
-      for(i=0;i<DD_NUM_OF_LD;i++){
-	for(j=0;j<8;j++){
-	  g_ld_h[i].mode[j] = D_LMOD_BLINK_RED;
-	}
-	DD_I2C1Send(g_ld_h[i].add, g_ld_h[i].mode, 8);
-      }
-#endif
       return EXIT_FAILURE;
     }
     //タイミング待ちを行います
     while( g_SY_system_counter % _INTERVAL_MS != 0 ){
     }
-    //もし一定時間以上応答がない場合はRCが切断されたとみなし、リセットをかけます。
-#if DD_USE_RC
-    count_for_rc++;
-    if(count_for_rc >= 20){
-      message("err","RC disconnected!");
-#if DD_NUM_OF_LD
-      for(i=0;i<DD_NUM_OF_LD;i++){
-	for(j=0;j<8;j++){
-	  g_ld_h[i].mode[j] = D_LMOD_BLINK_RED;
-	}
-	DD_I2C1Send(g_ld_h[i].add, g_ld_h[i].mode, 8);
-      }
-#endif
-      while(1);
-    }
-#endif
   }
 } /* main */
 

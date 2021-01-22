@@ -14,31 +14,23 @@
 #include "DD_MD.h"
 #include "DD_Gene.h"
 
-/*
- * ２バイト送信。
- * [0(7:4)|dir(3:2)|duty[9:8](1:0)][duty[7:0](7:0)]
- *
- * dirは0...free,1...forward,2...back,3...brake
- */
-
 int DD_send2MD(DD_MDHand_t *dmd){
-  uint8_t data[2];
+  uint8_t send_data[2];
   const uint8_t sizeof_data = 2;
-  uint16_t val;
-
-  /*upto 999*/
-  val = dmd->duty / 10;
-  if(val >= 1000){
-    message("err","[%x]duty over flow(%d)",dmd->add,dmd->duty);
-  }
   
   /* Merge Data merge */
-  data[0] = val >> 8 |
-            (uint8_t)dmd->mode << 2;
-  data[1] = val;
+  send_data[0] = dmd->snd_data[0] | (uint8_t)dmd->mode << 7;
+  send_data[1] = dmd->snd_data[1];
 
   /* Send data */
-  return DD_I2C1Send(dmd->add, data, sizeof_data);
+  return DD_I2C1Send(dmd->add, send_data, sizeof_data);
+}
+
+int DD_receive2MD(DD_MDHand_t *dmd){
+  const uint8_t sizeof_data = 2;
+
+  /* Receive data */
+  return DD_I2C1Receive(dmd->add, dmd->rcv_data, sizeof_data);
 }
 
 /*
@@ -48,21 +40,17 @@ int DD_send2MD(DD_MDHand_t *dmd){
  */
 
 void DD_MDHandPrint(DD_MDHand_t *dmd){
+  uint8_t send_data;
   MW_printf("MD(%02x):[", dmd->add);
   switch( dmd->mode ){
-  case D_MMOD_FREE:
-    MW_printf("Fr");
+  case D_MMOD_STANDBY:
+    MW_printf("STANDBY");
     break;
-  case D_MMOD_FORWARD:
-    MW_printf("Fw");
-    break;
-  case D_MMOD_BACKWARD:
-    MW_printf("Bw");
-    break;
-  case D_MMOD_BRAKE:
-    MW_printf("Br");
+  case D_MMOD_IN_GAME:
+    MW_printf("IN_GAME");
     break;
   }
-  MW_printf("],[%4d]\n", dmd->duty);
+  send_data = dmd->snd_data[0] | (uint8_t)dmd->mode << 7;
+  MW_printf("],[%08b][%08b],[%08b][%08b]\n", send_data,dmd->snd_data[1],dmd->rcv_data[0],dmd->rcv_data[1]);
 }
 

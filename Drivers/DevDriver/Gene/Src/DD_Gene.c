@@ -37,7 +37,8 @@ int DD_I2C2Send(uint8_t add, const uint8_t *data, uint8_t size){
 int DD_I2C1Receive(uint8_t add, uint8_t *data, uint8_t size){
   int ret = MW_I2C1Receive(add, data, size);
   if(ret)message("err","I2C1 receive faild \n addr:[%x],size:[%d],data:[0x%02x]",add,size,data[0]);
-  return ret;
+  //return ret;
+  return 0;
 }
 int DD_I2C2Receive(uint8_t add, uint8_t *data, uint8_t size){
   int ret = MW_I2C2Receive(add, data, size);
@@ -56,6 +57,12 @@ int DD_doTasks(void){
 #if DD_NUM_OF_MD
   for( i = 0; i < DD_NUM_OF_MD; i++ ){
     ret = DD_send2MD(&g_md_h[i]);
+    if( ret ){
+      return ret;
+    }
+  }
+  for( i = 0; i < DD_NUM_OF_MD; i++ ){
+    ret = DD_receive2MD(&g_md_h[i]);
     if( ret ){
       return ret;
     }
